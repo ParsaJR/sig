@@ -2,6 +2,12 @@
 
 A rewrite of suckless [sic](http://tools.suckless.org/sic/) in Go
 
+## Build/Install
+
+```
+go build sig.go
+```
+
 ## About
 
 sig is a rewrite of sic in Go.
