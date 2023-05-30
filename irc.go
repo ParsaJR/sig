@@ -28,6 +28,14 @@ func parseargs(args []string) {
 			address = args[i+1]
 			i++
 			break
+		case "-n":
+			if len(args) <= i+1 {
+				fmt.Println("Invalid arguments!")
+				os.Exit(2)
+			}
+			nick = args[i+1]
+			i++
+			break
 		case "-p":
 			if len(args) <= i+1 {
 				fmt.Println("Invalid arguments!")
@@ -95,8 +103,17 @@ func parsein(conn net.Conn, input string) {
 			}
 			msend(conn, "PRIVMSG " + arg[1] + " :" + strings.Join(arg[2:], " "))
 			break
+		case 'n':
+			if len(arg) < 2 {
+				fmt.Println("Error: Not enough args!!!")
+				break
+			}
+			nick = arg[1]
+			msend(conn, "NICK " + nick)
+			fmt.Println("Changed nick to " + nick)
+			break
 		case 'h':
-			fmt.Println("Commands: [j](join channel) [l](leave channel) [m](private message) [h](view this message) [q](quit)")
+			fmt.Println("Commands: [j](join channel) [l](leave channel) [m](private message) [n](change nick) [h](help) [q](quit)")
 			break
 		case 'q':
 			os.Exit(0)
@@ -163,7 +180,7 @@ func uinput(conn net.Conn) {
 }
 
 func usage() {
-	fmt.Println("Usage: irc [-a host] [-p port] [-ssl] [-h] [-v]")
+	fmt.Println("Usage: irc [-a host] [-p port] [-n nick] [-ssl] [-h] [-v]")
 }
 
 func main() {
