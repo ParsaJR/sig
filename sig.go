@@ -7,6 +7,7 @@ import (
 	"net"
 	"os"
 	"strings"
+	"time"
 )
 
 const partmsg string = "Goodbye so soon"
@@ -72,7 +73,9 @@ func parsein(conn net.Conn, input string) {
 			fmt.Println("No channel to send to!")
 		} else {
 			msend(conn, "PRIVMSG " + channel + " :" + input)
-			fmt.Fprintf(os.Stdout, "%s >< (%s): %s", channel, nick, input)
+			timeNow := time.Now()
+			datetime := timeNow.Format("2006-01-02 15:04")
+			fmt.Fprintf(os.Stdout, "%s: %s (%s) %s", channel, datetime, nick, input)
 		}
 		return
 	}
@@ -141,8 +144,10 @@ func parseout(conn net.Conn, output string) {
 		cmd := delimString[1]
 		recp := delimString[2]
 		text := strings.Join(delimString[3:], " ")
+		timeNow := time.Now()
+		datetime := timeNow.Format("2006-01-02 15:04")
 
-		fmt.Fprintf(os.Stdout, "%s >< %s %s %s\n", usr[0], cmd, recp, text)
+		fmt.Fprintf(os.Stdout, "%s: %s >< %s (%s) %s\n", usr[0], datetime, cmd, recp, text)
 		return
 	}
 	fmt.Println(data)
