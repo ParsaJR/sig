@@ -13,7 +13,7 @@ import (
 const partmsg string = "Goodbye so soon"
 var address string = "irc.libera.chat"
 var port string = "6667"
-var nick string = "Gonzoga"
+var nick string = "sig"
 var name string = os.Getenv("USER")
 var ssl bool = false
 var channel string = ""
