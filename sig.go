@@ -1,3 +1,5 @@
+// sig: a simple IRC client
+
 package main
 
 import (
@@ -23,24 +25,21 @@ func parseargs(args []string) {
 		switch args[i] {
 		case "-a":
 			if len(args) <= i+1 {
-				fmt.Println("Invalid arguments!")
-				os.Exit(2)
+				goto invalid
 			}
 			address = args[i+1]
 			i++
 			break
 		case "-n":
 			if len(args) <= i+1 {
-				fmt.Println("Invalid arguments!")
-				os.Exit(2)
+				goto invalid
 			}
 			nick = args[i+1]
 			i++
 			break
 		case "-p":
 			if len(args) <= i+1 {
-				fmt.Println("Invalid arguments!")
-				os.Exit(2)
+				goto invalid
 			}
 			port = args[i+1]
 			i++
@@ -49,7 +48,7 @@ func parseargs(args []string) {
 			ssl = true
 			break
 		case "-v":
-			fmt.Println("sig: v1.0 Bryce Vandegrift")
+			fmt.Println("sig: Bryce Vandegrift")
 			os.Exit(1)
 			break
 		case "-h":
@@ -57,11 +56,15 @@ func parseargs(args []string) {
 			os.Exit(1)
 			break
 		default:
-			fmt.Println("Error: Invalid arguments!!!")
-			os.Exit(2)
+			goto invalid
 			break
 		}
 	}
+	return
+
+invalid:
+	fmt.Println("Invalid argument(s)!")
+	os.Exit(2)
 }
 
 func parsein(conn net.Conn, input string) {
