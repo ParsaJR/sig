@@ -147,7 +147,11 @@ func parseout(conn net.Conn, output string) {
 		timeNow := time.Now()
 		datetime := timeNow.Format("2006-01-02 15:04")
 
-		fmt.Fprintf(os.Stdout, "%s: %s >< %s (%s) %s\n", usr[0], datetime, cmd, recp, text)
+		if len(text) >= 1 {
+			text = text[1:]
+		}
+
+		fmt.Fprintf(os.Stdout, "%s: %s >< %s (%s): %s\n", usr[0], datetime, cmd, recp, text)
 		return
 	}
 	fmt.Println(data)
