@@ -58,7 +58,6 @@ func parseargs(args []string) {
 			break
 		default:
 			goto invalid
-			break
 		}
 	}
 	return
@@ -181,7 +180,7 @@ func connect(address string, port string, ssl bool) net.Conn {
 }
 
 func msend(conn net.Conn, data string) {
-	fmt.Fprintf(conn, data+"\r\n")
+	fmt.Fprint(conn, data+"\r\n")
 }
 
 func uinput(conn net.Conn) {
