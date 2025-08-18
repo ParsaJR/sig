@@ -13,6 +13,7 @@ import (
 )
 
 const partmsg string = "Goodbye so soon"
+
 var address string = "irc.libera.chat"
 var port string = "6667"
 var nick string = "sig"
@@ -75,7 +76,7 @@ func parsein(conn net.Conn, input string) {
 		if channel == "" {
 			fmt.Println("No channel to send to!")
 		} else {
-			msend(conn, "PRIVMSG " + channel + " :" + input)
+			msend(conn, "PRIVMSG "+channel+" :"+input)
 			timeNow := time.Now()
 			datetime := timeNow.Format("2006-01-02 15:04")
 			fmt.Fprintf(os.Stdout, "%s: %s (%s) %s", channel, datetime, nick, input)
@@ -91,7 +92,7 @@ func parsein(conn net.Conn, input string) {
 				break
 			}
 			channel = arg[1]
-			msend(conn, "JOIN " + channel)
+			msend(conn, "JOIN "+channel)
 			fmt.Println("Joined " + channel)
 			break
 		case 'l':
@@ -100,14 +101,14 @@ func parsein(conn net.Conn, input string) {
 				break
 			}
 			channel = ""
-			msend(conn, "PART " + arg[1] + " " + partmsg)
+			msend(conn, "PART "+arg[1]+" "+partmsg)
 			break
 		case 'm':
 			if len(arg) < 3 {
 				fmt.Println("Error: Not enough args!!!")
 				break
 			}
-			msend(conn, "PRIVMSG " + arg[1] + " :" + strings.Join(arg[2:], " "))
+			msend(conn, "PRIVMSG "+arg[1]+" :"+strings.Join(arg[2:], " "))
 			break
 		case 'n':
 			if len(arg) < 2 {
@@ -115,7 +116,7 @@ func parsein(conn net.Conn, input string) {
 				break
 			}
 			nick = arg[1]
-			msend(conn, "NICK " + nick)
+			msend(conn, "NICK "+nick)
 			fmt.Println("Changed nick to " + nick)
 			break
 		case 'h':
@@ -136,7 +137,7 @@ func parseout(conn net.Conn, output string) {
 		return
 	}
 	if output[0:4] == "PING" {
-		msend(conn, "PONG :" + address)
+		msend(conn, "PONG :"+address)
 		return
 	}
 	var data = output
@@ -164,23 +165,23 @@ func connect(address string, port string, ssl bool) net.Conn {
 	var conn net.Conn
 	var err error
 	if ssl {
-		conn, err = tls.Dial("tcp", address + ":" + port, &tls.Config {})
+		conn, err = tls.Dial("tcp", address+":"+port, &tls.Config{})
 	} else {
-		conn, err = net.Dial("tcp", address + ":" + port)
+		conn, err = net.Dial("tcp", address+":"+port)
 	}
 	if err != nil {
 		fmt.Println("Could not connect to server!")
 		os.Exit(2)
 	}
 
-	msend(conn, "NICK " + nick)
-	msend(conn, "USER " + name + " 0 * :" + name)
+	msend(conn, "NICK "+nick)
+	msend(conn, "USER "+name+" 0 * :"+name)
 	fmt.Println("Connected!")
 	return conn
 }
 
 func msend(conn net.Conn, data string) {
-	fmt.Fprintf(conn, data + "\r\n")
+	fmt.Fprintf(conn, data+"\r\n")
 }
 
 func uinput(conn net.Conn) {
