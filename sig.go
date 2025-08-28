@@ -16,6 +16,7 @@ const partmsg string = "Goodbye so soon"
 
 var address string = "irc.libera.chat"
 var port string = "6667"
+var sslport string = "6697"
 var nick string = "sig"
 var name string = os.Getenv("USER")
 var ssl bool = false
@@ -164,12 +165,12 @@ func connect(address string, port string, ssl bool) net.Conn {
 	var conn net.Conn
 	var err error
 	if ssl {
-		conn, err = tls.Dial("tcp", address+":"+port, &tls.Config{})
+		conn, err = tls.Dial("tcp", address+":"+sslport, &tls.Config{})
 	} else {
 		conn, err = net.Dial("tcp", address+":"+port)
 	}
 	if err != nil {
-		fmt.Println("Could not connect to server!")
+		fmt.Println("Could not connect to server!", err.Error())
 		os.Exit(2)
 	}
 
